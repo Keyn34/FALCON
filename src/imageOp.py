@@ -14,12 +14,38 @@
 # registration.
 # License: Apache 2.0
 # **********************************************************************************************************************
-import subprocess
 
+
+# Imports
+import subprocess
 import SimpleITK
 import nibabel
 import pandas as pd
 from nilearn.input_data import NiftiMasker
+
+
+def sum_images_from_list(image_stack: list, summed_image_path: str = None) -> SimpleITK.Image:
+    # Start with the first image
+    summed_image = SimpleITK.ReadImage(image_stack[0], SimpleITK.sitkFloat64)
+
+    # Sum all other images
+    for image_index in range(1, len(image_stack)):
+        current_image = SimpleITK.ReadImage(image_stack[image_index], SimpleITK.sitkFloat64)
+        summed_image = summed_image + current_image
+
+    if summed_image_path is not None:
+        SimpleITK.WriteImage(summed_image, summed_image_path)
+
+    return summed_image
+
+
+def create_mean_image_from_list(image_stack: list, mean_image_path: str = None) -> SimpleITK.Image:
+    mean_image = sum_images_from_list(image_stack) / len(image_stack)
+
+    if mean_image_path is not None:
+        SimpleITK.WriteImage(mean_image, mean_image_path)
+
+    return mean_image
 
 
 def get_dimensions(nifti_file: str) -> int:

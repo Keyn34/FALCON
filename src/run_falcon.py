@@ -36,7 +36,6 @@ import preProcessing as pp
 import sysUtil as su
 
 # Initialize Logger
-
 logging.basicConfig(format='%(asctime)s %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s', level=logging.INFO,
                     filename=datetime.now().strftime('falcon-%H-%M-%d-%m-%Y.log'),
                     filemode='w')

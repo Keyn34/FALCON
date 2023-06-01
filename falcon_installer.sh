@@ -46,6 +46,7 @@ falcon_dir=`pwd`/'FALCON-files'
 falcon_bin=$falcon_dir/'bin'
 root_path='/usr/local/bin'
 falcon_src=$main_dir/'src'/'run_falcon.py'
+falcon_cardiac_src=$main_dir/'src'/'run_falcon_cardiac.py'
 
 echo '[5] Setting up symlinks for dependencies...'
 sudo ln -s "$falcon_bin"/'c3d' $root_path/'c3d'
@@ -63,6 +64,8 @@ sudo make install
 echo '[7] Adding falcon to path...'
 sudo chmod +x "$falcon_src"
 sudo ln -s "$falcon_src" $root_path/'falcon'
+sudo chmod +x "$falcon_cardiac_src"
+sudo ln -s "$falcon_cardiac_src" $root_path/'falcon-cardiac'
 
 echo '[8] Finished installing FALCON!'
 

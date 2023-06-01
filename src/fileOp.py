@@ -18,13 +18,8 @@ import glob
 import json
 import os
 import shutil
-import natsort
 from pathlib import Path
-import pydicom as dicom
-import SimpleITK as sitk
-import numpy as np
-from tqdm import tqdm
-
+import natsort
 import pyfiglet
 
 
@@ -36,6 +31,7 @@ def display_logo():
     print("\n")
     result = pyfiglet.figlet_format("Falcon v0.1", font="speed")
     print(result)
+
 
 def display_citation():
     """
@@ -115,6 +111,21 @@ def copy_files(src_dir: str, dest_dir: str, wildcard: str) -> None:
     # Copy each file from source directory to destination directory
     for file in files:
         shutil.copy(file, dest_dir)
+
+
+def copy_file(source_file_path: str, target_path: str) -> str:
+    """
+    Copies a source file to the specified destination
+    @rtype: str
+    @param source_file_path: the absolute path and file to copy
+    @param target_path: the destination where the file will be copied to
+    @return: a string containing the absolute path to the just copied file
+    """
+    if os.path.isfile(source_file_path):
+        file_path = shutil.copy(source_file_path, target_path)
+        return file_path
+    else:
+        print(f'Error: {source_file_path} is not a file!')
 
 
 def delete_files(dir_path: str, wildcard: str) -> None:
