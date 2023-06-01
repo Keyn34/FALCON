@@ -10,7 +10,7 @@
 # Email: sebastian.gutschmayer@meduniwien.ac.at
 # Institute: Quantitative Imaging and Medical Physics, Medical University of Vienna
 # Description: Falcon (FALCON) is a tool for the performing dynamic PET motion correction. It is based on the greedy
-# algorithm developed by the Paul Yushkevich. The algorithm is capable of performing fast rigid/affine/deformable
+# algorithm developed by Paul Yushkevich. The algorithm is capable of performing fast rigid/affine/deformable
 # registration.
 # License: Apache 2.0
 # **********************************************************************************************************************
@@ -66,14 +66,14 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "-m",
+        "-rfd",
         "--reference_frames_directory",
         type=str,
         help="path containing the images to motion correct",
         required=True
     )
     parser.add_argument(
-        "-sf",
+        "-sfd",
         "--sequence_frames_directory",
         type=str,
         help="reference frame directory",

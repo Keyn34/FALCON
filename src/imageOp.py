@@ -25,6 +25,13 @@ from nilearn.input_data import NiftiMasker
 
 
 def sum_images_from_list(image_stack: list, summed_image_path: str = None) -> SimpleITK.Image:
+    """
+    Sums all images from a list of image paths
+    :param image_stack: List of paths to images that should be summed
+    :param summed_image_path: Optional path to the resulting, summed image
+    :return: The summed image as SimpleITK.Image
+    :rtype: SimpleITK.Image
+    """
     # Start with the first image
     summed_image = SimpleITK.ReadImage(image_stack[0], SimpleITK.sitkFloat64)
 
@@ -40,6 +47,13 @@ def sum_images_from_list(image_stack: list, summed_image_path: str = None) -> Si
 
 
 def create_mean_image_from_list(image_stack: list, mean_image_path: str = None) -> SimpleITK.Image:
+    """
+    Averages all images from a list of image paths
+    :param image_stack: List of paths to images that should be averaged
+    :param mean_image_path: Optional path to the resulting, mean image
+    :return: The averaged image as SimpleITK.Image
+    :rtype: SimpleITK.Image
+    """
     mean_image = sum_images_from_list(image_stack) / len(image_stack)
 
     if mean_image_path is not None:
