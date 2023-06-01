@@ -26,3 +26,5 @@ SHRINK_LEVEL_8x = 8
 
 NCC_THRESHOLD = 0.6  # Normalized cross correlation threshold
 NCC_RADIUS = '4x4x4'  # Normalized cross correlation radius
+
+MOCO_FILE_PATTERN = "moco-*.*"

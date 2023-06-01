@@ -22,10 +22,7 @@ import os
 import subprocess
 import fileOp
 import argparse
-
-
-# Constants
-MOCO_FILE_PATTERN = "moco-*.*"
+import constants
 
 
 def prepare_reference_frame(reference_frame_folder, reference_gate_index) -> str:
@@ -129,13 +126,13 @@ if __name__ == '__main__':
     subprocess.run(FALCON_reference, shell=True, capture_output=False)
 
     # sum reference frame and move to sequence folder
-    files_for_moco = fileOp.get_files(sequence_frames_directory)
+    files_for_moco = fileOp.get_files(sequence_frames_directory, "*")
     last_filename = os.path.basename(files_for_moco[-1])
     file_extension = last_filename[last_filename.find('.'):]
     mean_reference_frame = os.path.join(sequence_frames_directory,
                                         f'vol{(len(files_for_moco) + 1):03}_artificial_reference_frame{file_extension}')
     corrected_reference_frames = fileOp.get_files(os.path.join(reference_frame_folder_for_moco, "moco"),
-                                                  MOCO_FILE_PATTERN)
+                                                  constants.MOCO_FILE_PATTERN)
     print(f'Creating summed reference frame from following files:')
     for corrected_reference_frame in corrected_reference_frames:
         print(corrected_reference_frame)
@@ -151,7 +148,7 @@ if __name__ == '__main__':
                       f"-i {multi_resolution_iterations}"
     subprocess.run(FALCON_sequence, shell=True, capture_output=False)
 
-    corrected_frames = fileOp.get_files(os.path.join(sequence_frames_directory, "moco"), MOCO_FILE_PATTERN)
+    corrected_frames = fileOp.get_files(os.path.join(sequence_frames_directory, "moco"), constants.MOCO_FILE_PATTERN)
     corrected_sequence_frames = corrected_frames[:-1]
 
     print(f'Creating summed reference frame from following files:')
