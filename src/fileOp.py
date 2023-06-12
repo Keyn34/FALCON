@@ -23,13 +23,23 @@ import natsort
 import pyfiglet
 
 
-def display_logo():
+def display_logo_FALCON():
     """
     Display Falcon logo
     :return:
     """
     print("\n")
     result = pyfiglet.figlet_format("Falcon v0.1", font="speed")
+    print(result)
+
+
+def display_logo_FALCON_cardiac():
+    """
+    Display Falcon logo
+    :return:
+    """
+    print("\n")
+    result = pyfiglet.figlet_format("Falcon-cardiac v0.1", font="speed")
     print(result)
 
 

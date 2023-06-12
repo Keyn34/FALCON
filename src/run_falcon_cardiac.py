@@ -62,6 +62,44 @@ def prepare_reference_frame(reference_frame_folder, reference_gate_index) -> str
     return prepared_reference_frame_folder_path
 
 
+def prepare_reference_frame_by_index(reference_frame_folder: str, reference_gate_index: int) -> str:
+    # Determine reference frame
+    reference_frames = fileOp.get_files(reference_frame_folder, "*")
+
+    if reference_gate_index > len(reference_frames):
+        reference_frame_index = len(reference_frames) - 1
+        print(f'ATTENTION - The provided gate index surpasses the number of existing reference frames.')
+    elif reference_gate_index < 0:
+        reference_frame_index = 0
+        print(f'ATTENTION - The provided gate index is smaller than 0.')
+    else:
+        reference_frame_index = reference_gate_index - 1
+
+    selected_reference_frame = reference_frames[reference_frame_index]
+    print(f'Reference frame is {selected_reference_frame}')
+
+    prepared_reference_frame_folder_path = os.path.join(reference_frame_folder, "reference_frame")
+    if not os.path.exists(prepared_reference_frame_folder_path):
+        os.mkdir(prepared_reference_frame_folder_path)
+
+    # Move files in ascending order
+    frame_index = 0
+    for reference_frame in reference_frames:
+        old_filename = os.path.basename(reference_frame)
+        file_extension = old_filename[old_filename.find('.'):]
+
+        if reference_frame == selected_reference_frame:
+            new_filename = os.path.join(prepared_reference_frame_folder_path,
+                                        f'vol{len(reference_frames) - 1:03}{file_extension}')
+        else:
+            new_filename = os.path.join(prepared_reference_frame_folder_path, f'vol{frame_index:03}{file_extension}')
+            frame_index += 1
+
+        fileOp.copy_file(reference_frame, new_filename)
+
+    return prepared_reference_frame_folder_path
+
+
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
@@ -113,6 +151,9 @@ if __name__ == '__main__':
     multi_resolution_iterations = args.multi_resolution_iterations
     gate_index = args.gate_index
 
+    fileOp.display_logo_FALCON_cardiac()
+    fileOp.display_citation()
+
     reference_frame_folder_for_moco = prepare_reference_frame(reference_frames_directory, gate_index)
 
     # run FALCON on reference frame folder
@@ -128,9 +169,10 @@ if __name__ == '__main__':
     # sum reference frame and move to sequence folder
     files_for_moco = fileOp.get_files(sequence_frames_directory, "*")
     last_filename = os.path.basename(files_for_moco[-1])
-    file_extension = last_filename[last_filename.find('.'):]
+    current_file_extension = last_filename[last_filename.find('.'):]
     mean_reference_frame = os.path.join(sequence_frames_directory,
-                                        f'vol{(len(files_for_moco) + 1):03}_artificial_reference_frame{file_extension}')
+                                        f'vol{(len(files_for_moco) + 1):03}'
+                                        f'_artificial_reference_frame{current_file_extension}')
     corrected_reference_frames = fileOp.get_files(os.path.join(reference_frame_folder_for_moco, "moco"),
                                                   constants.MOCO_FILE_PATTERN)
     print(f'Creating summed reference frame from following files:')
@@ -155,5 +197,5 @@ if __name__ == '__main__':
     for corrected_sequence_frame in corrected_sequence_frames:
         print(corrected_sequence_frame)
 
-    mean_frame = os.path.join(sequence_frames_directory, f"average_corrected_image{file_extension}")
+    mean_frame = os.path.join(sequence_frames_directory, f"average_corrected_image{current_file_extension}")
     imageOp.create_mean_image_from_list(corrected_sequence_frames, mean_frame)

@@ -129,7 +129,7 @@ if __name__ == "__main__":
         '                                       STARTING FALCON V.01                                             ')
     logging.info('****************************************************************************************************')
     start = timeit.default_timer()
-    fop.display_logo()
+    fop.display_logo_FALCON()
     fop.display_citation()
     logging.info(' ')
     logging.info('INPUT ARGUMENTS')
