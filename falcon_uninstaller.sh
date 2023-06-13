@@ -19,6 +19,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     echo "[2] Linux detected..."
     echo "[3] Removing falcon from /usr/local/bin..."
     sudo rm /usr/local/bin/falcon
+    sudo rm /usr/local/bin/falcon-cardiac
     echo "[4] Removing supporting binaries..."
     sudo rm /usr/local/bin/c3d
     sudo rm /usr/local/bin/greedy

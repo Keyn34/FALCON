@@ -39,7 +39,7 @@ def prepare_reference_frame(reference_frame_folder, reference_gate_index) -> str
                 reference_frame_index = frame_index
 
     selected_reference_frame = reference_frames[reference_frame_index]
-    print(f'Reference frame is {selected_reference_frame}')
+    print(f' Reference frame is {selected_reference_frame}')
 
     prepared_reference_frame_folder_path = os.path.join(reference_frame_folder, "reference_frame")
     if not os.path.exists(prepared_reference_frame_folder_path):
@@ -69,15 +69,15 @@ def prepare_reference_frame_by_index(reference_frame_folder: str, reference_gate
 
     if reference_gate_index > len(reference_frames):
         reference_frame_index = len(reference_frames) - 1
-        print(f'ATTENTION - The provided gate index surpasses the number of existing reference frames.')
+        print(f' ATTENTION - The provided gate index surpasses the number of existing reference frames.')
     elif reference_gate_index < 0:
         reference_frame_index = 0
-        print(f'ATTENTION - The provided gate index is smaller than 0.')
+        print(f' ATTENTION - The provided gate index is smaller than 0.')
     else:
         reference_frame_index = reference_gate_index - 1
 
     selected_reference_frame = reference_frames[reference_frame_index]
-    print(f'Reference frame is {selected_reference_frame}')
+    print(f' Reference frame is {selected_reference_frame}')
 
     prepared_reference_frame_folder_path = os.path.join(reference_frame_folder, "reference_frame")
     if not os.path.exists(prepared_reference_frame_folder_path):
@@ -178,9 +178,9 @@ if __name__ == '__main__':
                                         f'_artificial_reference_frame{current_file_extension}')
     corrected_reference_frames = fileOp.get_files(os.path.join(reference_frame_folder_for_moco, "moco"),
                                                   constants.MOCO_FILE_PATTERN)
-    print(f'Creating summed reference frame from following files:')
+    print(f' Creating summed reference frame from following files:')
     for corrected_reference_frame in corrected_reference_frames:
-        print(corrected_reference_frame)
+        print(f"  + {corrected_reference_frame}")
     imageOp.create_mean_image_from_list(corrected_reference_frames, mean_reference_frame)
 
     # run FALCON on sequence folder
@@ -198,9 +198,9 @@ if __name__ == '__main__':
     corrected_frames = fileOp.get_files(os.path.join(sequence_frames_directory, "moco"), constants.MOCO_FILE_PATTERN)
     corrected_sequence_frames = corrected_frames[:-1]
 
-    print(f'Creating summed reference frame from following files:')
+    print(f' Creating summed reference frame from following files:')
     for corrected_sequence_frame in corrected_sequence_frames:
-        print(corrected_sequence_frame)
+        print(f"  + {corrected_sequence_frame}")
 
     mean_frame = os.path.join(sequence_frames_directory, f"average_corrected_image{current_file_extension}")
     imageOp.create_mean_image_from_list(corrected_sequence_frames, mean_frame)
