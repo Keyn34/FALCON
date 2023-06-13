@@ -23,6 +23,7 @@ import subprocess
 import fileOp
 import argparse
 import constants
+from halo import Halo
 
 
 def prepare_reference_frame(reference_frame_folder, reference_gate_index) -> str:
@@ -154,17 +155,19 @@ if __name__ == '__main__':
     fileOp.display_logo_FALCON_cardiac()
     fileOp.display_citation()
 
-    reference_frame_folder_for_moco = prepare_reference_frame(reference_frames_directory, gate_index)
+    reference_frame_folder_for_moco = prepare_reference_frame_by_index(reference_frames_directory, gate_index)
 
     # run FALCON on reference frame folder
-    print(f"Running FALCON on {reference_frame_folder_for_moco}")
+    spinner = Halo(text=f"Running FALCON on {reference_frame_folder_for_moco}", spinner='dots')
+    spinner.start()
     FALCON_reference = f"falcon " \
                        f"-m {reference_frame_folder_for_moco} " \
                        f"-rf -1 " \
                        f"-sf 0 " \
                        f"-r {registration} " \
                        f"-i {multi_resolution_iterations}"
-    subprocess.run(FALCON_reference, shell=True, capture_output=False)
+    subprocess.run(FALCON_reference, shell=True, capture_output=True)
+    spinner.succeed(text=f"FALCON successfully performed motion correction on reference frames.")
 
     # sum reference frame and move to sequence folder
     files_for_moco = fileOp.get_files(sequence_frames_directory, "*")
@@ -181,14 +184,16 @@ if __name__ == '__main__':
     imageOp.create_mean_image_from_list(corrected_reference_frames, mean_reference_frame)
 
     # run FALCON on sequence folder
-    print(f"Running FALCON on {sequence_frames_directory}")
+    spinner = Halo(text=f"Running FALCON on {sequence_frames_directory}", spinner='dots')
+    spinner.start()
     FALCON_sequence = f"falcon " \
                       f"-m {sequence_frames_directory} " \
                       f"-rf -1 " \
                       f"-sf 0 " \
                       f"-r {registration} " \
                       f"-i {multi_resolution_iterations}"
-    subprocess.run(FALCON_sequence, shell=True, capture_output=False)
+    subprocess.run(FALCON_sequence, shell=True, capture_output=True)
+    spinner.succeed(text=f"FALCON successfully performed motion correction on sequence frames.")
 
     corrected_frames = fileOp.get_files(os.path.join(sequence_frames_directory, "moco"), constants.MOCO_FILE_PATTERN)
     corrected_sequence_frames = corrected_frames[:-1]
