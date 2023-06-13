@@ -95,12 +95,22 @@ FALCON supports DICOM, Nifti, Analyze, and Metaimage file formats, whether it's 
 
 falcon -m path_to_4d_images -r <rigid | affine | deformable> -i <number_of_iterations_per_level> -sf <starting_frame_from_which_moco_should_be_performed> -rf <reference_frame>
 ```
+
+- To use FALCON cardiac, use the following syntax:
+
+```bash
+
+
+falcon-cardiac -rfd path_to_reference_frames -sfd path_to_sequence_frames -gi gate_index_for_reference_frames -r <rigid | affine | deformable> -i <number_of_iterations_per_level>
+```
+
 - Here's an example of using FALCON in Pro mode:
 
 ```bash
 
 falcon -m /Documents/Sub001 -r deformable -i 100x50x25 -sf 0 -rf -1 # -1 indicates the last frame of the series
 ```
+
 In the example above, FALCON is performing deformable registration with 100, 50, and 25 iterations at each level of the multi-scale registration. The registration will start from the 1st frame and use the last frame as the reference.
 
 - Here's an example of using FALCON in lazy mode: 
@@ -109,7 +119,15 @@ In the example above, FALCON is performing deformable registration with 100, 50,
 falcon -m /Documents/Sub001 -r deformable # for whole-body registration
 falcon -m /Documents/Sub001 -r rigid # for brain only studies (much faster processing)
 ```
-As you can see from above, you don't need to specify a lot of additional parameters. The rest of the parameters are either inferred or set automatically based on common standards. 
+As you can see from above, you don't need to specify a lot of additional parameters. The rest of the parameters are either inferred or set automatically based on common standards.
+
+- Here's an example of using FALCON cardiac:
+
+```bash
+
+falcon-cardiac -rfd /Documents/Sub001/reference_frames -sfd /Documents/Sub001/sequence_frames -gi 4
+```
+```-gi``` uses a 1-based indexing, so ```-gi 4``` will use the fourth frame in the specified ```-rfd``` directory.
 
 ##### ⚠️ Note
 If you are not happy with the 'inferred' start frame, you can always set it on your own (we have set the internal threshold to be quite safe). Refer manuscript for more information.
