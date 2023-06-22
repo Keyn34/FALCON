@@ -80,6 +80,7 @@ if __name__ == '__main__':
     # Display logo and citation
     fileOp.display_logo_FALCON_cardiac()
     fileOp.display_citation()
+    print("FALCON-cardiac is a optimized version of FALCON for cardiac applications and motion correction. \n")
 
     # Determine reference frame
     reference_frames = fileOp.get_files(reference_frames_directory, "*")
